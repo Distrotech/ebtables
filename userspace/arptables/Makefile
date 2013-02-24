@@ -19,7 +19,7 @@ endif
 
 include extensions/Makefile
 
-all: arptables
+all: arptables libarptc/libarptc.a
 
 arptables.o: arptables.c
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -29,6 +29,9 @@ arptables-standalone.o: arptables-standalone.c
 
 libarptc/libarptc.o: libarptc/libarptc.c libarptc/libarptc_incl.c
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+libarptc/libarptc.a: libarptc/libarptc.o
+	$(AR) rcs $@ $<
 
 arptables: arptables-standalone.o arptables.o libarptc/libarptc.o $(EXT_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
@@ -62,7 +65,7 @@ clean:
 	rm -f arptables
 	rm -f *.o *~
 	rm -f extensions/*.o extensions/*~
-	rm -f libarptc/*.o libarptc/*~
+	rm -f libarptc/*.o libarptc/*~ libarptc/*.a
 	rm -f include/*~ include/libarptc/*~
 
 DIR:=arptables-v$(ARPTABLES_VERSION)
