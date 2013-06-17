@@ -10,8 +10,8 @@ LOCKDIR:=$(shell echo $(LOCKFILE) | sed 's/\(.*\)\/.*/\1/')/
 
 # default paths
 LIBDIR:=/usr/lib
-MANDIR:=/usr/local/man
-BINDIR:=/usr/local/sbin
+MANDIR:=/usr/share/man
+BINDIR:=/usr/sbin
 ETCDIR:=/etc
 INITDIR:=/etc/rc.d/init.d
 SYSCONFIGDIR:=/etc/sysconfig
