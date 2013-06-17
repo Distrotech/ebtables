@@ -2,10 +2,10 @@ ARPTABLES_VERSION:=0.0.4
 
 KERNEL_DIR:=./
 # default paths
-PREFIX:=/usr/local
+PREFIX:=/usr
 LIBDIR:=$(PREFIX)/lib
 BINDIR:=$(PREFIX)/sbin
-MANDIR:=$(PREFIX)/man
+MANDIR:=$(PREFIX)/share/man
 INITDIR:=/etc/rc.d/init.d
 SYSCONFIGDIR:=/etc/sysconfig
 DESTDIR:=
