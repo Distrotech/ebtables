@@ -1668,10 +1668,12 @@ static char *get_modprobe(void)
 
 	ret = malloc(1024);
 	if (ret) {
-		switch (read(procfile, ret, 1024)) {
+		int read_bytes = read(procfile, ret, 1024);
+		switch (read_bytes) {
 		case -1: goto fail;
 		case 1024: goto fail; /* Partial read.  Wierd */
 		}
+		ret[read_bytes] = '\0';
 		if (ret[strlen(ret)-1]=='\n')
 			ret[strlen(ret)-1]=0;
 		close(procfile);
