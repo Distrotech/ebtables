@@ -209,8 +209,10 @@ alloc_handle(const char *tablename, unsigned int size, unsigned int num_rules)
 	h->counter_map = (void *)h
 		+ sizeof(STRUCT_TC_HANDLE)
 		+ size;
-	strcpy(h->info.name, tablename);
-	strcpy(h->entries.name, tablename);
+	strncpy(h->info.name, tablename, sizeof(h->info.name));
+	h->info.name[sizeof(h->info.name)-1] = '\0';
+	strncpy(h->entries.name, tablename, sizeof(h->entries.name));
+	h->entries.name[sizeof(h->entries.name)-1] = '\0';
 
 	return h;
 }
@@ -357,8 +359,9 @@ add_chain(STRUCT_ENTRY *e, TC_HANDLE_T h, STRUCT_ENTRY **prev)
 		h->cache_chain_heads[h->cache_num_chains-1].end
 			= *prev;
 
-		strcpy(h->cache_chain_heads[h->cache_num_chains].name,
-		       (const char *)GET_TARGET(e)->data);
+		strncpy(h->cache_chain_heads[h->cache_num_chains].name,
+		       (const char *)GET_TARGET(e)->data, TABLE_MAXNAMELEN-1);
+		h->cache_chain_heads[h->cache_num_chains].name[TABLE_MAXNAMELEN-1] = '\0';
 		h->cache_chain_heads[h->cache_num_chains].start
 			= (void *)e + e->next_offset;
 		h->cache_num_chains++;
@@ -368,8 +371,9 @@ add_chain(STRUCT_ENTRY *e, TC_HANDLE_T h, STRUCT_ENTRY **prev)
 			h->cache_chain_heads[h->cache_num_chains-1].end
 				= *prev;
 
-		strcpy(h->cache_chain_heads[h->cache_num_chains].name,
-		       h->hooknames[builtin-1]);
+		strncpy(h->cache_chain_heads[h->cache_num_chains].name,
+		       h->hooknames[builtin-1], TABLE_MAXNAMELEN-1);
+		h->cache_chain_heads[h->cache_num_chains].name[TABLE_MAXNAMELEN-1] = '\0';
 		h->cache_chain_heads[h->cache_num_chains].start
 			= (void *)e;
 		h->cache_num_chains++;

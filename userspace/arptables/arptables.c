@@ -1270,7 +1270,7 @@ print_firewall(const struct arpt_entry *fw,
 			sprintf(buf, "%s", addr_to_dotted(&(fw->arp.src)));
 		else
 			sprintf(buf, "%s", addr_to_anyname(&(fw->arp.src)));
-		strcat(buf, mask_to_dotted(&(fw->arp.smsk)));
+		strncat(buf, mask_to_dotted(&(fw->arp.smsk)), sizeof(buf) - strlen(buf) -1);
 		printf("-s %s ", buf);
 	}
 
@@ -1294,7 +1294,7 @@ after_devsrc:
 			sprintf(buf, "%s", addr_to_dotted(&(fw->arp.tgt)));
 		else
 			sprintf(buf, "%s", addr_to_anyname(&(fw->arp.tgt)));
-		strcat(buf, mask_to_dotted(&(fw->arp.tmsk)));
+		strncat(buf, mask_to_dotted(&(fw->arp.tmsk)),  sizeof(buf) - strlen(buf) -1);
 		printf("-d %s ", buf);
 	}
 
@@ -1796,7 +1796,7 @@ int do_command(int argc, char *argv[], char **table, arptc_handle_t *handle)
 				*table, arptc_strerror(errno));
 			}
 		}
-        }
+	}
 
 	memset(&fw, 0, sizeof(fw));
 	opts = original_opts;
@@ -2064,7 +2064,8 @@ int do_command(int argc, char *argv[], char **table, arptc_handle_t *handle)
 
 				target->t = fw_calloc(1, size);
 				target->t->u.target_size = size;
-				strcpy(target->t->u.user.name, jumpto);
+				strncpy(target->t->u.user.name, jumpto, sizeof(target->t->u.user.name));
+				target->t->u.user.name[sizeof(target->t->u.user.name)-1] = '\0';
 /*
 				target->init(target->t, &fw.nfcache);
 */
