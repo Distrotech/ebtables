@@ -2,7 +2,7 @@ ARPTABLES_VERSION:=0.0.3-4
 
 KERNEL_DIR:=./
 # default paths
-PREFIX:=/usr/local
+PREFIX:=/usr
 LIBDIR:=$(PREFIX)/lib
 BINDIR:=$(PREFIX)/sbin
 MANDIR:=$(PREFIX)/man
