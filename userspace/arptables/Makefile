@@ -6,9 +6,12 @@ PREFIX:=/usr/local
 LIBDIR:=$(PREFIX)/lib
 BINDIR:=$(PREFIX)/sbin
 MANDIR:=$(PREFIX)/man
+man8dir=$(MANDIR)/man8
 INITDIR:=/etc/rc.d/init.d
 SYSCONFIGDIR:=/etc/sysconfig
 DESTDIR:=
+
+MANS = arptables.8 arptables-save.8 arptables-restore.8
 
 COPT_FLAGS:=-O2
 CFLAGS:=$(COPT_FLAGS) -Wall -Wunused -I$(KERNEL_DIR)/include/ -Iinclude/ -DARPTABLES_VERSION=\"$(ARPTABLES_VERSION)\" #-g -DDEBUG #-pg # -DARPTC_DEBUG
@@ -36,10 +39,6 @@ libarptc/libarptc.a: libarptc/libarptc.o
 arptables: arptables-standalone.o arptables.o libarptc/libarptc.o $(EXT_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
-$(DESTDIR)$(MANDIR)/man8/arptables.8: arptables.8
-	mkdir -p $(@D)
-	install -m 0644 $< $@
-
 $(DESTDIR)$(BINDIR)/arptables: arptables
 	mkdir -p $(DESTDIR)$(BINDIR)
 	install -m 0755 $< $@
@@ -57,8 +56,13 @@ scripts: arptables-save arptables-restore arptables.sysv
 	if test -d $(DESTDIR)$(INITDIR); then install -m 0755 arptables.sysv_ $(DESTDIR)$(INITDIR)/arptables; fi
 	rm -f arptables-save_ arptables-restore_ arptables.sysv_
 
+.PHONY: install-man
+install-man: $(MANS)
+	[ -d "$(DESTDIR)$(man8dir)" ] || mkdir -p "$(DESTDIR)$(man8dir)"
+	install -m 0644 $^ $(DESTDIR)$(man8dir)/
+
 .PHONY: install
-install: $(DESTDIR)$(MANDIR)/man8/arptables.8 $(DESTDIR)$(BINDIR)/arptables scripts
+install: install-man $(DESTDIR)$(BINDIR)/arptables scripts
 
 .PHONY: clean
 clean:
