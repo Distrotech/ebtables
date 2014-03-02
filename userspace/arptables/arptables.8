@@ -215,6 +215,14 @@ The target of the rule. This is one of the following values:
 a target extension (see
 .BR "TARGET EXTENSIONS" ")"
 or a user-defined chain name.
+.TP
+.BI "-c, --set-counters " "PKTS BYTES"
+This enables the administrator to initialize the packet and byte
+counters of a rule (during
+.B INSERT,
+.B APPEND,
+.B REPLACE
+operations).
 
 .SS RULE-SPECIFICATIONS
 The following command line arguments make up a rule specification (as used 
