@@ -411,3 +411,16 @@ char *ebt_ip6_to_numeric(const struct in6_addr *addrp)
 	static char buf[50+1];
 	return (char *)inet_ntop(AF_INET6, addrp, buf, sizeof(buf));
 }
+
+char *ebt_ip6_mask_to_string(const struct in6_addr *msk)
+{
+   	/* /0000:0000:0000:0000:0000:000.000.000.000
+	 * /0000:0000:0000:0000:0000:0000:0000:0000 */
+	static char buf[51+1];
+	if (msk->s6_addr32[0] == 0xFFFFFFFFL && msk->s6_addr32[1] == 0xFFFFFFFFL &&
+	    msk->s6_addr32[2] == 0xFFFFFFFFL && msk->s6_addr32[3] == 0xFFFFFFFFL)
+		*buf = '\0';
+	else
+		sprintf(buf, "/%s", ebt_ip6_to_numeric(msk));
+	return buf;
+}
